@@ -31,7 +31,7 @@ def decrypt(filename, key):
     try:
         decrypted_data = f.decrypt(encrypted_data)
     except cryptography.fernet.InvalidToken:
-        print("Incorrect password")
+        print("Incorrect password, sorry")
         return
     with open(filename, "wb") as file:
         file.write(decrypted_data)
@@ -91,13 +91,13 @@ def main():
     decrypt_ = args.decrypt
 
     if encrypt_ and decrypt_:
-        raise TypeError("Please specify whether you want to encrypt the file or decrypt it.")
+        print("Please specify whether you want to encrypt the file or decrypt it.")
     elif encrypt_:
         encrypt(file, key)
     elif decrypt_:
         decrypt(file, key)
     else: 
-        raise TypeError("Please specify whether you want to encrypt the file or decrypt it.")
+        print("Please specify whether you want to encrypt the file or decrypt it.")
 
 # Run the main function
 main()

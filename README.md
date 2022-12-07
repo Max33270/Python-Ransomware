@@ -7,8 +7,8 @@
 ## Usage
 
 To encrypt a file, launch : <br>
-- `python3 RansomWare.py yourfiletoencrypt.txt --encrypt` <br> 
-- `python3 RansomWare.py yourfiletoencrypt.txt -e`
+- `python3 RansomWare.py yourfiletoencrypt.txt --encrypt --salt-size 16` <br> 
+- `python3 RansomWare.py yourfiletoencrypt.txt -e --salt-size 16`
 
 Then create a password to encrypt your file. <br>
 
