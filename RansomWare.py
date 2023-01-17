@@ -5,6 +5,8 @@ import secrets
 import base64
 import getpass
 import argparse
+from cryptography.hazmat.primitives import serialization,hashes
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
 
 # Add the generated key with Fernet to key.key
 def write_key():
@@ -14,28 +16,65 @@ def write_key():
 
 
 # Encrypt the cotents of a file with the key
-def encrypt(filename, key):
-    f = Fernet(key)
-    with open(filename, "rb") as file:
-        file_data = file.read()
-    encrypted_data = f.encrypt(file_data)
-    with open(filename, "wb") as file:
-        file.write(encrypted_data)
-
+def encrypt(filename, key,encryption_type):
+    if encryption_type=='symmetric':
+        f = Fernet(key)
+        with open(filename, "rb") as file:
+            file_data = file.read()
+        encrypted_data = f.encrypt(file_data)
+        with open(filename, "wb") as file:
+            file.write(encrypted_data)
+    elif encryption_type=='asymmetric':
+        with open(filename, "rb") as file:
+            data = file.read()
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048
+        )
+        public_key = private_key.public_key()
+        ciphertext = public_key.encrypt(
+            data,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        with open(filename, "wb") as file:
+            file.write(ciphertext)
 
 # Decrypt the contents of a file with the same key
-def decrypt(filename, key):
-    f = Fernet(key)
-    with open(filename, "rb") as file:
-        encrypted_data = file.read()
-    try:
-        decrypted_data = f.decrypt(encrypted_data)
-    except cryptography.fernet.InvalidToken:
-        print("Incorrect password, sorry")
-        return
-    with open(filename, "wb") as file:
-        file.write(decrypted_data)
-    print("File decrypted successfully")
+def decrypt(filename, key,encryption_type):
+    if encryption_type=='symmetric':
+        f = Fernet(key)
+        with open(filename, "rb") as file:
+            encrypted_data = file.read()
+        try:
+            decrypted_data = f.decrypt(encrypted_data)
+        except cryptography.fernet.InvalidToken:
+            print("Incorrect password, sorry")
+            return
+        with open(filename, "wb") as file:
+            file.write(decrypted_data)
+        print("File decrypted successfully")
+    elif encryption_type=='asymmetric':
+        with open(filename, "rb") as file:
+            data = file.read()
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048
+        )
+        decrypted_data = private_key.decrypt(
+            data,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        with open(filename, "wb") as file:
+            file.write(        decrypted_data)
+        print("File decrypted successfully")
 
 
 # Generate a 16 byte salt to make the password more secure
@@ -73,6 +112,7 @@ def main():
     parser.add_argument("-s", "--salt-size", help="If this is set, a new salt with the passed size is generated",type=int)
     parser.add_argument("-e", "--encrypt", action="store_true",help="If you want to encrypt please enter your file followed by -e or --encrypt.")
     parser.add_argument("-d", "--decrypt", action="store_true", help="If you want to decrypt please enter your file followed by -d or --decrypt .")
+    parser.add_argument("-t", "--encryption-type", help="If this is set, encryption type can be chosen (symmetric or asymmetric)",type=str)
 
     args = parser.parse_args()
     file = args.file
@@ -89,15 +129,19 @@ def main():
 
     encrypt_ = args.encrypt
     decrypt_ = args.decrypt
+    encryption_type=args.encryption_type
+    if encryption_type not in ['symmetric','asymmetric']:
+        print("Please choose valid encryption type")
+        return
 
     if encrypt_ and decrypt_:
         print("Please specify whether you want to encrypt the file or decrypt it.")
     elif encrypt_:
-        encrypt(file, key)
+        encrypt(file, key,encryption_type)
     elif decrypt_:
-        decrypt(file, key)
-    else: 
-        print("Please specify whether you want to encrypt the file or decrypt it.")
+        decrypt(file, key,encryption_type)
 
-# Run the main function
-main()
+if __name__ == "__main__":
+    main()
+
+
