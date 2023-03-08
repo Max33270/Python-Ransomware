@@ -2,6 +2,7 @@ import cryptography
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
+import os
 
 private_key = rsa.generate_private_key(
     public_exponent=65537,
@@ -17,7 +18,10 @@ serial_private = private_key.private_bytes(
     encryption_algorithm=serialization.NoEncryption()
 )
 
-with open("private_key.pem", "wb") as f:
+if not os.path.exists("Keys"):
+    os.makedirs("Keys")
+
+with open("Keys/private_key.pem", "wb") as f:
     f.write(serial_private)
 
 serial_pub = public_key.public_bytes(
@@ -25,7 +29,7 @@ serial_pub = public_key.public_bytes(
     format=serialization.PublicFormat.SubjectPublicKeyInfo
 )
 
-with open("public_key.pem", "wb") as f:
+with open("Keys/public_key.pem", "wb") as f:
     f.write(serial_pub)
 
 print("Private and public keys were created successfully!")

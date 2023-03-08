@@ -1,5 +1,6 @@
 DS_Store
-file.txt
-salt.salt
-key.key
-key.pem
+Asymmetric/Keys/*.pem
+Symmetric/Keys/*.pem
+Asymmetric/file.txt
+Symmetric/file.txt
+Symmetric/salt.salt

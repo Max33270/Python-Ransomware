@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
-key_file = open('public_key.pem', 'rb')
+key_file = open('Keys/public_key.pem', 'rb')
 
 public_key = serialization.load_pem_public_key(
     key_file.read(),

@@ -5,16 +5,21 @@ import secrets
 import base64
 import getpass
 import argparse
+import os 
 
 # Create the salt.salt file
 def create_salt_file():
     with open('salt.salt', 'w') as f:
         pass
 
+# Create the Keys folder
+if not os.path.exists("Keys"):
+    os.makedirs("Keys")
+
 # Add the generated key with Fernet to key.key
 def write_key():
     key = Fernet.generate_key()
-    with open("key.key", "wb") as key_file:
+    with open("Keys/key.key", "wb") as key_file:
         key_file.write(key)
 
 

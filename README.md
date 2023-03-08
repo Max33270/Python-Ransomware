@@ -4,6 +4,13 @@
 
 `pip3 install cryptography`
 
+
+
+
+
+
+
+
 ## Usage
 
 To encrypt a file, launch : <br>
@@ -16,3 +23,4 @@ To decrypt a file, launch : <br>
 - `python3 symmetric.py <file-to-decrypt> --decrypt` <br>
 
 Then enter the password you used to encrypt your original file. <br>
+
