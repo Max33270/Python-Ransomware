@@ -6,6 +6,11 @@ import base64
 import getpass
 import argparse
 
+# Create the salt.salt file
+def create_salt_file():
+    with open('salt.salt', 'w') as f:
+        pass
+
 # Add the generated key with Fernet to key.key
 def write_key():
     key = Fernet.generate_key()
@@ -102,4 +107,5 @@ def main():
 # Run the main function
 if __name__ == "__main__":
     write_key()
+    create_salt_file()
     main()
