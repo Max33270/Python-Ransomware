@@ -1,10 +1,13 @@
 # Python RansomWare Manual
 
-## Prerequisites
+## Prerequisites <br>
 
-`pip3 install cryptography`
+`Python 3` <br>
+`pip3 install cryptography` <br> <br>
 
-### I. Symmetric Encryption and Decryption
+### I. Symmetric Encryption and Decryption <br>
+
+`cd Symmetric` <br>
 
 #### 1. Encrypting a file
 Launch one of the following commands and enter a password : <br>
@@ -18,6 +21,8 @@ Launch one of the following commands and enter the password you used to encrypt 
 
 
 ### II. Asymmetric Encryption and Decryption
+
+`cd Asymmetric` <br>
 
 #### 1. Creating a key pair
 Launch the following command : <br>
@@ -34,7 +39,7 @@ Enter the string you want to encrypt <br>
 
 #### 4. Decrypting a file
 Launch the following command : <br>
-`python3 asymmetric_file_decryption.py` <br>
+`python3 asymmetric_file_decryption.py` <br> <br>
 
 This project is for educational purposes only. <br>
 Have fun and don't use this for malicious purposes !
