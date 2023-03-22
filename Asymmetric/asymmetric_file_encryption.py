@@ -1,12 +1,9 @@
-import cryptography
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
 def main():
-
     key_file = open('Keys/public_key.pem', 'rb')
 
     public_key = serialization.load_pem_public_key(

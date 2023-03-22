@@ -10,7 +10,7 @@ import os
 # Create the salt.salt file
 def create_salt_file():
     with open('salt.salt', 'w') as f:
-        pass
+        f.write("")
 
 # Create the Keys folder
 if not os.path.exists("Keys"):
@@ -80,7 +80,6 @@ def generate_key(password, salt_size=16, salt_exists=False, create_salt=True):
 def main():
     parser = argparse.ArgumentParser(description="Encrypt/Decrypt")
     parser.add_argument("file", help="File to encrypt/decrypt")
-    parser.add_argument("-s", "--salt-size", help="If this is set, a new salt with the passed size is generated",type=int)
     parser.add_argument("-e", "--encrypt", action="store_true",help="If you want to encrypt please enter your file followed by -e or --encrypt.")
     parser.add_argument("-d", "--decrypt", action="store_true", help="If you want to decrypt please enter your file followed by -d or --decrypt .")
 
@@ -91,12 +90,8 @@ def main():
         password = getpass.getpass("Enter the password for encryption: ")
     elif args.decrypt:
         password = getpass.getpass("Enter the password you used for encryption: ")
-
-    if args.salt_size:
-        key = generate_key(password, salt_size=args.salt_size, create_salt=True)
-    else:
-        key = generate_key(password, salt_exists=True)
-
+        
+    key = generate_key(password, salt_exists=True)
     encrypt_ = args.encrypt
     decrypt_ = args.decrypt
 
