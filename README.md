@@ -37,7 +37,7 @@ Launch the following command : <br>
 `python3 asymmetric_string_encryption.py` <br>
 Enter the string you want to encrypt <br>
 
-#### 4. Decrypting a file
+#### 4. Decrypting a file / an input from the terminal saved in a file :
 Launch the following command : <br>
 `python3 asymmetric_file_decryption.py` <br> <br>
 
