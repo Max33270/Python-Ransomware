@@ -24,7 +24,7 @@ def write_key():
 
 
 # Encrypt the cotents of a file with the key
-def encrypt(filename, key):
+def encrypt_file(filename, key):
     f = Fernet(key)
     with open(filename, "rb") as file:
         file_data = file.read()
@@ -33,8 +33,16 @@ def encrypt(filename, key):
         file.write(encrypted_data)
 
 
+# Encrypt the cotents of a folder with the key
+def encrypt_folder(folder, key):
+    for root, dirs, files in os.walk(folder):
+        for file in files:
+            file_path = os.path.join(root, file)
+            encrypt_file(file_path, key)
+
+
 # Decrypt the contents of a file with the same key
-def decrypt(filename, key):
+def decrypt_file(filename, key):
     f = Fernet(key)
     with open(filename, "rb") as file:
         encrypted_data = file.read()
@@ -46,6 +54,14 @@ def decrypt(filename, key):
     with open(filename, "wb") as file:
         file.write(decrypted_data)
     print("File decrypted successfully")
+
+
+# Decrypt the contents of a file with the same key
+def decrypt_folder(folder, key):
+    for root, dirs, files in os.walk(folder):
+        for file in files:
+            file_path = os.path.join(root, file)
+            decrypt_file(file_path, key)
 
 
 # Generate a 16 byte salt to make the password more secure
@@ -98,9 +114,15 @@ def main():
     if encrypt_ and decrypt_:
         print("Please specify whether you want to encrypt the file or decrypt it.")
     elif encrypt_:
-        encrypt(file, key)
+        if os.path.isfile(file):
+            encrypt_file(file, key)
+        elif os.path.isdir(file):
+            encrypt_folder(file, key)
     elif decrypt_:
-        decrypt(file, key)
+        if os.path.isfile(file):
+            decrypt_file(file, key)
+        elif os.path.isdir(file):
+            decrypt_folder(file, key)
     else: 
         print("Please specify whether you want to encrypt the file or decrypt it.")
 
