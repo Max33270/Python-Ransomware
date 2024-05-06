@@ -44,16 +44,30 @@ def encrypt_folder(folder, key):
 # Decrypt the contents of a file with the same key
 def decrypt_file(filename, key):
     f = Fernet(key)
-    with open(filename, "rb") as file:
-        encrypted_data = file.read()
-    try:
-        decrypted_data = f.decrypt(encrypted_data)
-    except cryptography.fernet.InvalidToken:
-        print("Incorrect password, sorry")
-        return
-    with open(filename, "wb") as file:
-        file.write(decrypted_data)
-    print("File decrypted successfully")
+    attempts = 3
+    first_attempt = True
+    while attempts > 0:
+        if not first_attempt:
+            password = getpass.getpass("Enter the password you used for encryption: ")
+            derived_key = generate_key(password, salt_exists=True)
+        else:
+            first_attempt = False
+            derived_key = key
+        try:
+            with open(filename, "rb") as file:
+                encrypted_data = file.read()
+            f = Fernet(derived_key)
+            decrypted_data = f.decrypt(encrypted_data)
+            with open(filename, "wb") as file:
+                file.write(decrypted_data)
+            print("File decrypted successfully")
+            return
+        except cryptography.fernet.InvalidToken:
+            print("Incorrect password, please try again")
+            attempts -= 1
+            if attempts == 0:
+                print("You've exceeded the maximum number of attempts. Exiting.")
+                return
 
 
 # Decrypt the contents of a file with the same key
